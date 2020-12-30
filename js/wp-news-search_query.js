@@ -1,28 +1,31 @@
 // Using https://newsapi.org/docs/authentication
 
 (function ($) {
-
     $(document).ready(function () {
+        const result = $('#result');
+
         $('#wp-news-search__form').submit(function (event) {
             event.preventDefault();
 
-            // const keyword = $('#query-input').val();
-            const values = $(this).serialize();
+            const form_data = {
+                keyword: $('#news-keyword').val(),
+                source: $('#news-source').val(),
+            }
 
 
-            if (values) {
+            if (form_data) {
                 // send stuff to php
-                console.log(values);
                 const data = {
                     action: 'get_news_callback',
                     status: 'enabled',
+                    dataType: 'json',
                     security: ajax_object.security,
-                    form_data: values
+                    data: form_data
                 }
 
-                $.post(ajax_object.ajax_url, data, function(response) {
+                $.post(ajax_object.ajax_url, data, function (response) {
                     if (response) {
-                        console.log(`Response is: ${response}`);
+                        result.html(response);
                     }
                 })
                     .fail(() => { console.error('error'); })
