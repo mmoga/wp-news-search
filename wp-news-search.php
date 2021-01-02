@@ -26,6 +26,12 @@ if (!class_exists('News_Search')) {
      * @author: Matthew Mogavero
      */
     class News_Search {
+        /**
+         * The single instance of the class.
+         *
+         * @var News_Search
+         */
+        private static $instance = null;
 
         /**
          * Plugin settings.
@@ -48,6 +54,18 @@ if (!class_exists('News_Search')) {
             );
 
             $this->run_plugin();
+        }
+
+        /**
+         * Singleton.
+         *
+         * @return self Main instance.
+         */
+        public static function init() {
+            if (is_null(self::$instance)) {
+                self::$instance = new self();
+            }
+            return self::$instance;
         }
 
         /**
@@ -162,5 +180,5 @@ if (!class_exists('News_Search')) {
         }
     }
 
-    new News_Search();
+    News_Search::init();
 }
