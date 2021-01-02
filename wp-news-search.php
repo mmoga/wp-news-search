@@ -3,34 +3,68 @@
  * Plugin Name: News Search Plugin
  * Plugin URI: https://github.com/mmoga/...
  * Description: Add a form to search for news articles.
- * Version: 0.1
+ * Version: 1.0.0
  * Text Domain: wp-news-search
  * Author: Matthew Mogavero
  * Author URI: https://mogavero.dev
  **/
 
-// Hide the key from Git
+/**
+ * Hide the key from Git.
+ */
 include ".env.php";
 
-// No direct access to the plugin—sorry!
+/**
+ * No direct access to the plugin—sorry!
+ */
 defined('ABSPATH') or die('Ah ah ah. You didn\'t say the magic word.');
 
 if (!class_exists('News_Search')) {
-
+    /**
+     * News Search main class.
+     *
+     * @author: Matthew Mogavero
+     */
     class News_Search {
 
-        // Properties
-        private $news_source;
+        /**
+         * Plugin settings.
+         *
+         * @var array
+         */
+        public $settings = array();
 
-        // Constructor
-        // Load scripts upon class initiation
+        /**
+         * News Search Constructor.
+         */
         public function __construct() {
+            $this->settings = array(
+                'plugin_path' => plugin_dir_path(__FILE__),
+                'plugin_url' => plugin_dir_url(__FILE__),
+                'plugin_base' => dirname(plugin_basename(__FILE__)),
+                'plugin_base_url' => plugin_basename(__FILE__),
+                'plugin_file' => __FILE__,
+                'plugin_version' => '1.0.0',
+            );
+
+            $this->run_plugin();
+        }
+
+        /**
+         * Main plugin function.
+         *
+         * @since 1.0.0
+         */
+        public function run_plugin() {
             add_action('wp_enqueue_scripts', array($this, 'enqueue_scripts'));
             add_action('wp_ajax_get_news_callback', array($this, 'get_news_callback'));
             add_action('wp_ajax_nopriv_get_news_callback', array($this, 'get_news_callback'));
-            add_shortcode('wp_news_search', array($this, 'wp_news_search_form'));
+            add_shortcode('wp_news_search', array($this, 'wp_news_shortcode'));
         }
-        // Enqueue scripts
+
+        /**
+         * Enqueue scripts.
+         */
         function enqueue_scripts() {
             // Enqueue CSS
             wp_enqueue_style('wp-news-search', plugins_url('/css/wp-news-search.css', __FILE__));
@@ -42,27 +76,54 @@ if (!class_exists('News_Search')) {
                 ));
         }
 
-        // Display the HTML search form
-        public function wp_news_search_form() {
-            // Wrap this in a container at some point
-            {
-                $content .= '<form id="wp-news-search__form">
-            <label for="news-keyword">
-            Search by keywords
-            <input type="text" id="news-keyword" name="news-keyword" placeholder="' . __('Enter keywords') . '" required>
-            </label>
-            <button id="wp-news-search__submit">' .
-                __('Search for news', 'wp-news-search') .
-                    '</button>
-            </form>';
-            }
+        /**
+         * News Search shortcode.
+         *
+         * @since 1.0.0
+         * @param array $atts An associative array of attributes.
+         * @return string
+         */
+        public function wp_news_shortcode($atts) {
+            $settings = shortcode_atts(
+                array(
+                    'source' => 'google',
+                ),
+                $atts
+            );
 
-            // Show result on page
-            $content .= '<div id="result"></div>';
+            $source = $settings['source'];
+
+            $content = '';
+            $view = $this->get_view_path('form.php');
+            if (file_exists($view)) {
+                ob_start();
+                include $view;
+                $content = ob_get_clean();
+            }
             return $content;
         }
 
-        // Handle AJAX request
+        /**
+         * Get the path to view.
+         *
+         * @param string $view_name View name.
+         * @param string|boolean $sub_dir_name The sub-directory.
+         * @return string
+         */
+        public function get_view_path($view_name, $sub_dir_name = false) {
+            $path = $rel_path = '';
+            $plugin_base = 'wp-news-search';
+            if (!empty($sub_dir_name)) {
+                $rel_path .= "/{$sub_dir_name}";
+            }
+            $rel_path .= "/{$view_name}";
+            $path = $this->settings['plugin_path'] . 'views' . $rel_path;
+            return $path;
+        }
+
+        /**
+         * Handle AJAX request.
+         */
         function get_news_callback() {
             check_ajax_referer('my-string-shh', 'security');
 
