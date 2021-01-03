@@ -9,7 +9,7 @@
 
             const form_data = {
                 keyword: $('#news-keyword').val(),
-                source: $('#news-source').val(),
+                // source: $('#news-source').val(),
             }
 
 
@@ -26,9 +26,12 @@
                 $.post(ajax_object.ajax_url, data, function (response) {
                     if (response) {
                         result.html(response);
+
                     }
                 })
-                    .fail(() => { console.error('error'); })
+                    .fail(() => { 
+                        result.html('We\'re experiencing technical difficulties. 🙁');
+                     })
                     .always(() => { console.log('form submitted') });
             }
 

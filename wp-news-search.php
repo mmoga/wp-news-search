@@ -34,6 +34,13 @@ if (!class_exists('News_Search')) {
         private static $instance = null;
 
         /**
+         * The news source.
+         *
+         * @var string
+         */
+        public $source = "";
+
+        /**
          * Plugin settings.
          *
          * @var array
@@ -85,9 +92,9 @@ if (!class_exists('News_Search')) {
          */
         function enqueue_scripts() {
             // Enqueue CSS
-            wp_enqueue_style('wp-news-search', plugins_url('/css/wp-news-search.css', __FILE__));
+            wp_enqueue_style('wp-news-search', plugins_url('css/wp-news-search.css', __FILE__));
             // Enqueue and localize JS
-            wp_enqueue_script('ajax-script', plugins_url('/js/wp-news-search_query.js', __FILE__), array('jquery'), null, true);
+            wp_enqueue_script('ajax-script', plugins_url('js/wp-news-search_query.js', __FILE__), array('jquery'), null, true);
             wp_localize_script('ajax-script', 'ajax_object',
                 array('ajax_url' => admin_url('admin-ajax.php'),
                     'security' => wp_create_nonce('my-string-shh'),
@@ -95,20 +102,20 @@ if (!class_exists('News_Search')) {
         }
 
         /**
-         * News Search shortcode.
+         * News Search shortcode. Adds form to page.
          *
          * @since 1.0.0
          * @param array $atts An associative array of attributes.
          * @return string
          */
         public function wp_news_shortcode($atts) {
+            global $source;
             $settings = shortcode_atts(
                 array(
                     'source' => 'google',
                 ),
                 $atts
             );
-
             $source = $settings['source'];
 
             $content = '';
@@ -142,7 +149,7 @@ if (!class_exists('News_Search')) {
         /**
          * Handle AJAX request.
          */
-        function get_news_callback() {
+        public function get_news_callback($source) {
             check_ajax_referer('my-string-shh', 'security');
 
             $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
@@ -151,7 +158,7 @@ if (!class_exists('News_Search')) {
                 $form_data = ($_POST['data']);
                 $keyword = trim($form_data['keyword']);
 
-                $endpoint = 'https://newsapi.org/v2/everything?q=' . rawurlencode($keyword) . '&domains=' . esc_html__( /* source */) . '.com';
+                $endpoint = 'https://newsapi.org/v2/everything?q=' . rawurlencode($keyword) /*. '&domains=' . esc_html__( source ) . '.com' */;
                 $options = [
                     'headers' => array(
                         'Content-Type' => 'application/json',
@@ -165,14 +172,19 @@ if (!class_exists('News_Search')) {
                 if (is_array($result) && !is_wp_error($result)) {
                     $error_message = $result->get_error_message();
                     echo "Something went wrong: $error_message";
+                } elseif (empty($result->articles)) {
+                    echo 'No articles found. 😔';
                 } else {
-                    // Return the decoded JSON to jQuery
-                    echo '<pre>';
-                    print_r($result);
-                    echo '</pre>';
-                    echo $endpoint;
+                    // $this->show_articles($result);
+                    $content = '';
+                    $view = $this->get_view_path('article.php');
+                    if (file_exists($view)) {
+                        ob_start();
+                        include $view;
+                        $content = ob_get_clean();
+                    }
+                    echo $content;
                 }
-
             }
 
             die();
