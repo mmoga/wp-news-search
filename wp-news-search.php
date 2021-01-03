@@ -168,6 +168,7 @@ if (!class_exists('News_Search')) {
                 $response = wp_remote_get($endpoint, $options);
                 $response_body = wp_remote_retrieve_body($response);
                 $result = json_decode($response_body);
+                $articles = $result->articles;
 
                 if (is_array($result) && !is_wp_error($result)) {
                     $error_message = $result->get_error_message();
@@ -175,7 +176,6 @@ if (!class_exists('News_Search')) {
                 } elseif (empty($result->articles)) {
                     echo 'No articles found. 😔';
                 } else {
-                    // $this->show_articles($result);
                     $content = '';
                     $view = $this->get_view_path('article.php');
                     if (file_exists($view)) {
