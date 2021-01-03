@@ -1,3 +1,42 @@
-#query-input {
-  border: red solid 5px;
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap");
+
+#wp-news-search-results .wp-news-search-articles__wrapper {
+  display: flex;
+  flex-flow: row wrap;
+}
+
+#wp-news-search-results .wp-news-search-articles__article,
+#wp-news-search-results .wp-news-search-articles__article .img__wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+#wp-news-search-results .wp-news-search-articles__article .img__wrapper {
+  flex: 3 1 calc(var(--modifier) * 999);
+  height: calc(282px + 5vw);
+  overflow: hidden;
+}
+
+#wp-news-search-results .wp-news-search-articles__article .img__wrapper img {
+  max-width: 100%;
+  min-height: 100%;
+  width: auto;
+  height: auto;
+  object-fit: cover;
+  object-position: 50% 50%;
+}
+
+#wp-news-search-results .wp-news-search-articles__article {
+  --modifier: calc(70ch - 100%);
+  border: 2px solid #f2f2f2;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+#wp-news-search-results .wp-news-search-articles__article h3 {
+  margin: 0;
+  font-size: clamp(1.4em, 2.1vw, 2.1em);
+  font-family: "Montserrat", Helvetica, Arial, sans-serif;
+  padding: 16px 32px;
 }

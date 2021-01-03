@@ -2,7 +2,7 @@
 
 (function ($) {
     $(document).ready(function () {
-        const result = $('#result');
+        const result = $('#wp-news-search-results');
 
         $('#wp-news-search__form').submit(function (event) {
             event.preventDefault();

@@ -16,4 +16,4 @@
     <button id="wp-news-search__submit"><?php echo __('Search for news', 'wp-news-search') ?></button>
 </form>
 
-<div id="result"></div>
+<div id="wp-news-search-results"></div>

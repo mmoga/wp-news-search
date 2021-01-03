@@ -13,14 +13,16 @@
     $article_img = $article->urlToImage;
     $placeholder_img = 'https://via.placeholder.com/350x250';
     ?>
-        <div class="wp-news-search-articles__article">
-            <img src="<?php echo $article_img ?: $placeholder_img; ?>" alt="">
+        <article class="wp-news-search-articles__article">
+            <div class="img__wrapper">
+                <img src="<?php echo $article_img ?: $placeholder_img; ?>" alt="">
+            </div>
             <a href="<?php echo $article->url; ?>">
                 <h3>
                     <?php echo $article->title; ?>
                 </h3>
             </a>
-        </div>
+        </article>
         <?php endforeach;?>
     </div>
 </div>
