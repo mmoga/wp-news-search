@@ -38,7 +38,7 @@ if (!class_exists('News_Search')) {
          *
          * @var string
          */
-        public $source = "";
+        public $outlet = "";
 
         /**
          * Plugin settings.
@@ -89,6 +89,8 @@ if (!class_exists('News_Search')) {
 
         /**
          * Enqueue scripts.
+         *
+         * @since 1.0.0
          */
         function enqueue_scripts() {
             // Enqueue CSS
@@ -102,21 +104,21 @@ if (!class_exists('News_Search')) {
         }
 
         /**
-         * News Search shortcode. Adds form to page.
+         * News Search shortcode. Adds form to page and retrieves attributes.
          *
          * @since 1.0.0
          * @param array $atts An associative array of attributes.
          * @return string
          */
         public function wp_news_shortcode($atts) {
-            global $source;
-            $settings = shortcode_atts(
+            $atts = shortcode_atts(
                 array(
-                    'source' => 'google',
+                    'outlet' => 'google',
                 ),
                 $atts
             );
-            $source = $settings['source'];
+            $outlet = $atts['outlet'];
+            set_transient('_outlet', $outlet, 12 * HOUR_IN_SECONDS);
 
             $content = '';
             $view = $this->get_view_path('form.php');
@@ -149,7 +151,7 @@ if (!class_exists('News_Search')) {
         /**
          * Handle AJAX request.
          */
-        public function get_news_callback($source) {
+        public function get_news_callback() {
             check_ajax_referer('my-string-shh', 'security');
 
             $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
@@ -157,8 +159,9 @@ if (!class_exists('News_Search')) {
             if (isset($_POST['data'])) {
                 $form_data = ($_POST['data']);
                 $keyword = trim($form_data['keyword']);
+                $outlet = get_transient('_outlet');
 
-                $endpoint = 'https://newsapi.org/v2/everything?q=' . rawurlencode($keyword) /*. '&domains=' . esc_html__( source ) . '.com' */;
+                $endpoint = 'https://newsapi.org/v2/everything?q=' . rawurlencode($keyword) . '&domains=' . esc_html__($outlet) . '.com';
                 $options = [
                     'headers' => array(
                         'Content-Type' => 'application/json',
@@ -175,6 +178,7 @@ if (!class_exists('News_Search')) {
                     echo "Something went wrong: $error_message";
                 } elseif (empty($result->articles)) {
                     echo 'No articles found. 😔';
+
                 } else {
                     $content = '';
                     $view = $this->get_view_path('article.php');
