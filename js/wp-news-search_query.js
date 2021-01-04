@@ -3,9 +3,12 @@
 (function ($) {
     $(document).ready(function () {
         const result = $('#wp-news-search-results');
+        const button = $('#wp-news-search__form button');
 
         $('#wp-news-search__form').submit(function (event) {
             event.preventDefault();
+
+            button.attr('disabled', true);
 
             const form_data = {
                 keyword: $('#news-keyword').val(),
@@ -26,13 +29,12 @@
                 $.post(ajax_object.ajax_url, data, function (response) {
                     if (response) {
                         result.html(response);
-
                     }
                 })
-                    .fail(() => { 
-                        result.html('We\'re experiencing technical difficulties. 🙁');
+                .fail(() => { 
+                    result.html('We\'re experiencing technical difficulties. 🙁');
                      })
-                    .always(() => { console.log('form submitted') });
+                    .always(() => { button.attr('disabled', false); });
             }
 
         });
