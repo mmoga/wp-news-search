@@ -1,4 +1,7 @@
+/* Import Roboto Slab for article headings */
 @import url("https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@500&display=swap");
+
+/* Article styles */
 
 #wp-news-search-results .wp-news-search-articles__wrapper {
   display: flex;
@@ -49,4 +52,54 @@
   margin-bottom: 1ex;
   font-size: clamp(1.4em, 2.1vw, 2.1em);
   font-family: "Roboto Slab", serif;
+}
+
+/* Form styles */
+
+#wp-news-search__form {
+}
+
+#wp-news-search__form .form__wrapper {
+  display: flex;
+  flex-flow: row wrap;
+  flex: 1 0 260px;
+  justify-content: space-between;
+}
+
+#wp-news-search__form input {
+  flex: 4 0 auto;
+  height: 45px;
+  margin-bottom: 20px;
+  padding: 5px 10px 5px 40px;
+  font-size: 20px;
+  border: black solid 4px;
+  border-radius: 8px;
+  background: white url(../img/magnifying-glass.svg) no-repeat 1%;
+  background-size: 20px;
+  transition: transform ease-in 0.3s;
+}
+
+#wp-news-search__form button {
+  flex: 1 0 auto;
+  height: 45px;
+  border: black solid 4px;
+  border-radius: 8px;
+  padding: 5px 10px;
+  font-family: "Roboto Slab", serif;
+  font-size: 20px;
+  background-color: white;
+  transition: transform ease-in 0.3s;
+}
+
+/* Form  effects */
+#wp-news-search__form input:focus,
+#wp-news-search__form button:focus {
+  transform: scale(1.1);
+  outline-offset: 2px;
+  outline: 2px dotted var(--form--border-color);
+}
+
+#wp-news-search__form button:hover,
+#wp-news-search__form button:focus {
+  transform: scale(1.1);
 }
