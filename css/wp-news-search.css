@@ -49,9 +49,20 @@
 }
 
 #wp-news-search-results .wp-news-search-articles-article .article-title {
+  position: relative;
   margin-bottom: 1ex;
   font-size: clamp(1.4em, 2.1vw, 2.1em);
   font-family: "Roboto Slab", serif;
+}
+
+#wp-news-search-results .wp-news-search-articles-article .article-title::after {
+  position: absolute;
+  content: "";
+  margin: 0.2em;
+  width: 20px;
+  height: 20px;
+  background: url(../img/new_tab.svg) no-repeat;
+  background-size: 20px;
 }
 
 /* Form styles */

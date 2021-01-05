@@ -20,10 +20,11 @@
                         height="600">
                 </div>
                 <div class="article-content">
-                    <a href="<?php echo $article->url; ?>" rel="noopener noreferrer">
+                    <a href="<?php echo $article->url; ?>" rel="noopener noreferrer" target="_blank">
                         <h2 class="article-title">
                             <?php echo $article->title; ?>
                         </h2>
+                        <span class="screen-reader-text">Opens in new tab</span>
                     </a>
                     <p class="article-description">
                         <?php echo $article->description; ?>
