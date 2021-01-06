@@ -34,13 +34,6 @@ if (!class_exists('News_Search')) {
         private static $instance = null;
 
         /**
-         * The news source.
-         *
-         * @var string
-         */
-        public $outlet = "";
-
-        /**
          * Plugin settings.
          *
          * @var array
@@ -104,7 +97,7 @@ if (!class_exists('News_Search')) {
         }
 
         /**
-         * News Search shortcode. Adds form to page and retrieves attributes.
+         * News Search shortcode. Adds form to page and stores "outlet" attribute to options.
          *
          * @since 1.0.0
          * @param array $atts An associative array of attributes.
@@ -118,7 +111,6 @@ if (!class_exists('News_Search')) {
                 $atts
             );
             $outlet = $atts['outlet'];
-            set_transient('_outlet', $outlet, 12 * HOUR_IN_SECONDS);
 
             $content = '';
             $view = $this->get_view_path('form.php');
@@ -159,9 +151,9 @@ if (!class_exists('News_Search')) {
             if (isset($_POST['data'])) {
                 $form_data = ($_POST['data']);
                 $keyword = trim($form_data['keyword']);
-                $outlet = get_transient('_outlet');
+                $outlet = sanitize_text_field($form_data['outlet']);
 
-                $endpoint = 'https://newsapi.org/v2/everything?q=' . rawurlencode($keyword) . '&domains=' . esc_html__($outlet) . '.com';
+                $endpoint = 'https://newsapi.org/v2/everything?q=' . rawurlencode($keyword) . '&domains=' . $outlet . '.com';
                 $options = [
                     'headers' => array(
                         'Content-Type' => 'application/json',

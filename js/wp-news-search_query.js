@@ -12,7 +12,7 @@
 
             const form_data = {
                 keyword: $('#news-keyword').val(),
-                // source: $('#news-source').val(),
+                outlet: $('#news-outlet').val(),
             }
 
 
