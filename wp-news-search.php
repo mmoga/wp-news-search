@@ -110,7 +110,10 @@ if (!class_exists('News_Search')) {
                 ),
                 $atts
             );
-            $outlet = $atts['outlet'];
+            $outlet = sanitize_text_field($atts['outlet']);
+            if (!$outlet) {
+                $outlet = 'google';
+            }
 
             $content = '';
             $view = $this->get_view_path('form.php');
@@ -146,12 +149,12 @@ if (!class_exists('News_Search')) {
         public function get_news_callback() {
             check_ajax_referer('my-string-shh', 'security');
 
-            $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
+            $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING, FILTER_FLAG_STRIP_HIGH);
 
             if (isset($_POST['data'])) {
                 $form_data = ($_POST['data']);
                 $keyword = trim($form_data['keyword']);
-                $outlet = sanitize_text_field($form_data['outlet']);
+                $outlet = trim($form_data['outlet']);
 
                 $endpoint = 'https://newsapi.org/v2/everything?q=' . rawurlencode($keyword) . '&domains=' . $outlet . '.com';
                 $options = [
