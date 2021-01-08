@@ -4,19 +4,18 @@
  *
  * @package wp-news-search
  */
-
 ?>
 
 <div class="wp-news-search-articles__container">
     <div class="wp-news-search-articles__wrapper">
         <?php foreach ($articles as $article):
-    $article_img = $article->urlToImage;
+    $img_url = $article->urlToImage;
     $placeholder_img = 'https://via.placeholder.com/900x600?text=No+article+image';
     ?>
         <div class="wp-news-search-articles__block">
             <article class="wp-news-search-articles-article">
                 <div class="img__wrapper">
-                    <img src="<?php echo $article_img ?: $placeholder_img; ?>" alt="" loading="lazy" width="900"
+                    <img src="<?php echo $img_url ?: $placeholder_img; ?>" alt="" loading="lazy" width="900"
                         height="600">
                 </div>
                 <div class="article-content">
