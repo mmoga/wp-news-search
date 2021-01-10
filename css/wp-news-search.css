@@ -68,6 +68,7 @@
 /* Form styles */
 
 #wp-news-search__form {
+  max-width: 600px;
 }
 
 #wp-news-search__form .form__wrapper {
