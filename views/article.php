@@ -6,7 +6,7 @@
  */
 ?>
 
-<div class="wp-news-search-articles__container">
+<div id="wp-article" class="wp-news-search-articles__container" aria-live="polite">
     <div class="wp-news-search-articles__wrapper">
         <?php foreach ($articles as $article):
     $img_url = $article->urlToImage;

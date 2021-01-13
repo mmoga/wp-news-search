@@ -11,7 +11,7 @@
     <label for="news-keyword">Search by keywords</label>
     <div class="form__wrapper">
         <input type="text" id="news-keyword" name="news-keyword" placeholder="<?php echo __('e.g. captain crunch') ?>"
-            required>
+            required aria-controls="wp-article">
         <input type="hidden" id="news-outlet" name="news-outlet" value="<?php echo $outlet; ?>">
         <button id="wp-news-search__submit"><?php echo __('Search for news', 'wp-news-search') ?></button>
     </div>
