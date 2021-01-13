@@ -11,6 +11,26 @@
 #wp-news-search-results .wp-news-search-articles__block {
   width: 100%;
   padding: 24px;
+  transform: translateX(-400px);
+  opacity: 0;
+  animation: clear 0.3s ease forwards;
+}
+
+/* Slower animation for prefers-reduced-motion */
+@media (prefers-reduced-motion) {
+  #wp-news-search-results .wp-news-search-articles__block {
+    transform: none;
+    opacity: 0;
+    animation-duration: 0.8s;
+  }
+}
+
+/* Animation for articles */
+@keyframes clear {
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
 }
 
 #wp-news-search-results .wp-news-search-articles-article,
@@ -41,6 +61,7 @@
   border-radius: 8px;
   overflow: hidden;
   background-color: white;
+  box-shadow: 0 7px 7px -5px dimgrey;
 }
 
 #wp-news-search-results .wp-news-search-articles-article .article-content {
